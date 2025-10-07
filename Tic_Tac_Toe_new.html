@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .game-container {
+            margin: 0 auto;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        table, tr, td {
+            border: 5px solid #000;
+        }
+
+        td {
+            height: 100px;
+            width: 100px;
+            font-size: 85px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+        }
+
+        #winner {
+            font-size: 25px;
+            margin: 10px 0;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+    <div class="game-container">
+        <h2>Game Tic-Tac-Toe</h2>
+
+        <p id="winner"></p>
+        <table border="1" id="gameData">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="startNewGame()">Start New Game</button>
+    </div>
+
+    <script>
+        let player = "0";
+
+        $(document).ready(function () {
+            $("#gameData td").click(function () {
+                if ($(this).text() === "") {
+                    $(this).text(player);
+                    player = player === "0" ? "X" : "0";
+                    checkWinner();
+                }
+            });
+        });
+
+        function checkWinner(){
+            let cell1 = $('#gameData tbody tr:eq(0) td:eq(0)').text();
+            let cell2 = $('#gameData tbody tr:eq(0) td:eq(1)').text();
+            let cell3 = $('#gameData tbody tr:eq(0) td:eq(2)').text();
+            let cell4 = $('#gameData tbody tr:eq(1) td:eq(0)').text();
+            let cell5 = $('#gameData tbody tr:eq(1) td:eq(1)').text();
+            let cell6 = $('#gameData tbody tr:eq(1) td:eq(2)').text();
+            let cell7 = $('#gameData tbody tr:eq(2) td:eq(0)').text();
+            let cell8 = $('#gameData tbody tr:eq(2) td:eq(1)').text();
+            let cell9 = $('#gameData tbody tr:eq(2) td:eq(2)').text();
+
+            if (cell1 == cell2 && cell1 == cell3 && (cell1 == "0" || cell2 == "X")) {
+                alert("Winner is a " + cell1);
+            };
+
+            if (cell4 == cell5 && cell5 == cell6 && (cell5 == "0" || cell5 == "X")) {
+                alert("Winner is a " + cell4);
+            };
+
+            if (cell7 == cell8 && cell8 == cell9 && (cell7 == "0" || cell7 == "X")) {
+                alert("Winner is a " + cell7);
+            };
+
+            if (cell1 == cell4 && cell4 == cell7 && (cell7 == "0" || cell7 == "X")) {
+                alert("Winner is a " + cell7);
+            };
+
+            if (cell2 == cell8 && cell8 == cell5 && (cell5 == "0" || cell5 == "X")) {
+                alert("Winner is a " + cell5);
+            };
+
+            if (cell3 == cell6 && cell6 == cell9 && (cell3 == "0" || cell3 == "X")) {
+                alert("Winner is a " + cell3);
+            };
+
+            if (cell1 == cell5 && cell5 == cell9 && (cell1 == "0" || cell1 == "X")) {
+                alert("Winner is a " + cell1);
+            };
+
+            if (cell3 == cell5 && cell5 == cell7 && (cell3 == "0" || cell3 == "X")) {
+                alert("Winner is a " + cell3);
+            };
+        };
+
+        function startNewGame() {
+            $("#gameData td").text('');
+            player = "0";
+        }
+    </script>
+</body>
+</html>

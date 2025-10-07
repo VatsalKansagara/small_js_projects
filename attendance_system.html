@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+        button{
+            padding: 10px 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .header{
+            max-width: 85%;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        td{
+            text-align: center;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <div class="system-satrt">
+        <div class="header">
+            <button type="button" id="punch-in">Punch In</button>
+            <button type="button" id="lunch-in">Lunch In</button>
+            <button type="button" id="lunch-out">Lunch Out</button>
+            <button type="button" id="punch-out">Punch Out</button>
+        </div>
+
+        <div>
+            <table id="userdata" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Entery Time</th>
+                        <th>Lunch Start</th>
+                        <th>Lunch Over</th>
+                        <th>Exit Time</th>
+                        <th>Lunch Time</th>
+                        <th>Working Time</th>
+                        <th>Total Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#lunch-in').attr('disabled', 'disabled');
+            $('#lunch-out').attr('disabled', 'disabled');
+            $('#punch-out').attr('disabled', 'disabled');
+
+            function liveTime() {
+                let d = new Date();
+                let hours = d.getHours();
+                let minutes = d.getMinutes();
+                let seconds = d.getSeconds();
+                let livetime = hours.toString().padStart(2, "0") + ":" + minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
+                return livetime;
+            }
+
+            function diffranceTime(val) {
+                let d = val;
+                let seconds = Math.floor(d / 1000);
+                let sec = seconds % 60;
+                let minutes = Math.floor(seconds / 60);
+                let min = minutes % 60;
+                let hours = Math.floor(minutes / 60);
+                let livetime = hours.toString().padStart(2, "0") + ":" + min.toString().padStart(2, "0") + ":" + sec.toString().padStart(2, "0");
+                return livetime;
+            }
+
+            function CountTime() {
+                let d = new Date();
+                let milliseconds = d.getTime();
+                return milliseconds;
+            }
+
+            var newRow = "";
+            $('#punch-in').click(function () {
+                var timeofentry = liveTime();
+                let entryTime = CountTime();
+                newRow = "<tr><td ms=" + entryTime + ">" + timeofentry + "</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+                $('#userdata tbody').append(newRow);
+                $('#lunch-in').attr('disabled', false);
+                $('#punch-out').attr('disabled', false);
+                $('#punch-in').attr('disabled', true);
+            });
+
+            $('#lunch-in').click(function () {
+                var lunchentry = liveTime();
+                let lentry = CountTime();
+                $('#userdata tbody tr:last td:eq(1)').append(lunchentry);
+                $('#userdata tbody tr:last td:eq(1)').attr('ms', lentry);
+                $('#lunch-in').attr('disabled', true);
+                $('#lunch-out').attr('disabled', false);
+                $('#punch-out').attr('disabled', true);
+            });
+
+            $('#lunch-out').click(function () {
+                var lunchexit = liveTime();
+                let lexit = CountTime();
+                $('#userdata tbody tr:last td:eq(2)').append(lunchexit);
+                $('#userdata tbody tr:last td:eq(2)').attr('ms', lexit);
+                $('#lunch-out').attr('disabled', true);
+                $('#punch-out').attr('disabled', false);
+                $('#punch-out').attr('disabled', false);
+            });
+
+            $('#punch-out').click(function () {
+                var timeofexit = liveTime();
+                let exitTime = CountTime();
+
+                $('#userdata tbody tr:last td:eq(3)').append(timeofexit);
+                $('#userdata tbody tr:last td:eq(3)').attr('ms', exitTime);
+                $('#punch-in').attr('disabled', false);
+                $('#lunch-in').attr('disabled', true);
+                $('#lunch-out').attr('disabled', true);
+                $('#punch-out').attr('disabled', true);
+
+                let stime = $('#userdata tbody tr:last td:eq(0)').attr("ms");
+                let breakstart = $('#userdata tbody tr:last td:eq(1)').attr("ms");
+                let breakend = $('#userdata tbody tr:last td:eq(2)').attr("ms");
+                let etime = $('#userdata tbody tr:last td:eq(3)').attr("ms");
+
+                var counttime = etime - stime;
+                let breaktotal = breakstart && breakend ? breakend - breakstart : 0;
+                let breakfinaltime = diffranceTime(breaktotal);
+                $('#userdata tbody tr:last td:eq(4)').append(breakfinaltime);
+
+                let totalfinaltime = diffranceTime(counttime);
+                $('#userdata tbody tr:last td:eq(6)').append(totalfinaltime);
+
+                if(breaktotal){
+                       let minusbreaktime = counttime - breaktotal;
+                       let countfinaltime = diffranceTime(minusbreaktime);
+                       $('#userdata tbody tr:last td:eq(5)').append(countfinaltime);
+                }
+                else{
+                       let countfinaltime = diffranceTime(counttime);
+                       $('#userdata tbody tr:last td:eq(5)').append(countfinaltime);
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
