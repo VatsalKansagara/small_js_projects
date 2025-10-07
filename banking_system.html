@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .banking-system{
+            width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        input{
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .btns{
+            margin-top: 15px;
+        }
+        button{
+            padding: 10px 15px;
+            margin: 0 10px;
+        }
+        table{
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        td {
+            text-align: center;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+    <div class="banking-system">
+        <h1>Banking System</h1>
+
+        <p id="liveBalance">Available Amount: <span>0</span></p>
+
+        <!--<input type="text" id="balanceInput" placeholder="Enter Amount" />-->
+
+        <div class="btns">
+            <button onclick="deposit()">Deposit</button>
+            <button onclick="withdrawal()">Withdrawal</button>
+            <button onclick="intrest()">Intrest</button>
+            <button onclick="check()">Check Create</button>
+        </div>
+
+        <div>
+            <table id="amountData" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Transfer Id.</th>
+                        <th>Deposit Amount</th>
+                        <th>Withdrawal Amount</th>
+                        <th>Description</th>
+                        <th>Intrest Amount</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let amount = 0;
+
+        function transferId(){
+            let random = Math.floor(Math.random() * 1000000000);
+            $('#amountData tbody tr:last td:eq(1)').append(random);
+        };
+        
+        function deposit() {
+            let balance = parseInt(prompt("Enter A Deposit Amount", 0));
+            let description = prompt("Enter A Some Description", "My Self");
+            if (balance) {
+                amount += balance;
+                $('#liveBalance span').text(amount);
+                liveTime();
+                $('#amountData tbody tr:last td:eq(2)').append(balance);
+                transferId();
+                $('#amountData tbody tr:last td:eq(4)').append(description ? description : "My Self");
+            }
+            else {
+                alert("Enter A Amount");
+            }
+        };
+
+        function withdrawal() {
+            let balance = parseInt(prompt("Enter A Withdrawal Amount", 0));
+            let description = prompt("Enter A Some Description", "My Self");
+            if (balance && amount >= balance) {
+                amount -= balance;
+                $('#liveBalance span').text(amount);
+                liveTime();
+                $('#amountData tbody tr:last td:eq(3)').append(balance);
+                transferId();
+                $('#amountData tbody tr:last td:eq(4)').append(description ? description : "My Self");
+            }
+            else {
+                alert("Invalid Amount!");
+            }
+        };
+
+        function intrest() {
+            let persentage = parseInt(prompt("Enter A Persentage 0 To 10"));
+            if (amount == 0) {
+                alert("Invalid Amount!");
+            }
+            else if (persentage >= 0 && persentage <= 10) {
+                let intrest = (amount * persentage) / 100;
+                amount += intrest;
+                $('#liveBalance span').text(amount);
+                liveTime();
+                $('#amountData tbody tr:last td:eq(5)').append(intrest);
+                $('#amountData tbody tr:last td:eq(4)').append(persentage + " % Add");
+            }
+            else {
+                alert("Invalid Persentage!");
+            }
+        };
+
+        var newRow = "";
+        function liveTime() {
+            let d = new Date();
+            let date = d.getDate();
+            let month = (d.getMonth()) + 1;
+            let year = d.getFullYear();
+            let livetime = date.toString().padStart(2, "0") + "/" + month.toString().padStart(2, "0") + "/" + year;
+            newRow = "<tr><td>" + livetime + "</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+            $('#amountData tbody').append(newRow);
+            $('#amountData tbody tr:last td:eq(6)').append(amount);
+            return livetime;
+        };
+
+        function check() {
+            let balance = parseInt(prompt("Enter A Check Amount", 0));
+            let description = prompt("Enter A Check withdrawal Name");
+            liveTime();
+            transferId();
+            if (amount > balance) {
+                alert("Invalid Amount!");
+            }
+            $('#amountData tbody tr:last td:eq(4)').append("Check IN Progress");
+            setTimeout(holdCheck, 20000);
+            function holdCheck() {
+                if (balance && amount >= balance) {
+                    amount -= balance;
+                    $('#liveBalance span').text(amount);
+                    $('#amountData tbody tr:last td:eq(3)').append(balance);
+                    $('#amountData tbody tr:last td:eq(4)').text(" ");
+                    $('#amountData tbody tr:last td:eq(4)').append(description ? description : "Check withdrawal Succsefully");
+                    $('#amountData tbody tr:last td:eq(6)').text(" ");
+                    $('#amountData tbody tr:last td:eq(6)').append(amount);
+                }
+                else {
+                    alert("Check Rejected!");
+                }
+            };
+        };
+    </script>
+</body>
+</html>

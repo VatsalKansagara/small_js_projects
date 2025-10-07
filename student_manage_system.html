@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        body{
+            margin: 10px;
+            padding: 10px;
+        }
+        .container{
+            text-align: center;
+        }
+        .m-auto {
+            margin: 8px 0;
+        }
+
+        table {
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+            text-align: center !important;
+        }
+        td{
+            padding: 3px !important;
+        }
+
+        .display-none{
+            display: none;
+            visibility: hidden;
+        }
+
+        .label-right{
+            float: right;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <button type="button" class="btn btn-info btn-lg m-5 m-auto" data-toggle="modal" data-target="#myModal" id="openModalBtn">Add Student Form</button>
+        <button type="button" class="btn btn-info btn-lg m-5 m-auto" data-toggle="modal" data-target="#myModal2" id="openTeacherBtn">Add Teacher Form</button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Student Form</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+
+                            <div class="m-auto">
+                                <label>First Name:</label>
+                                <input type="text" id="fname" required />
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Last Name:</label>
+                                <input type="text" id="lname" required />
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Email:</label>
+                                <input type="email" id="email" required />
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Phone:</label>
+                                <input type="tel" id="phone" maxlength="10" required pattern="^\d{10}$" />
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Standard:</label>
+                                <select name="standar" id="standar">
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="five">5</option>
+                                    <option value="six">6</option>
+                                    <option value="seven">7</option>
+                                    <option value="eight">8</option>
+                                    <option value="nine">9</option>
+                                    <option value="ten">10</option>
+                                    <option value="eleven">11</option>
+                                    <option value="twelve">12</option>
+                                </select>
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Gender:</label>
+                                <input type="radio" id="female" name="gender" value="female" />
+                                <label for="female">Female</label>
+                                <input type="radio" id="male" name="gender" value="male" />
+                                <label for="male">male</label>
+                            </div>
+
+                            <div class="btns">
+                                <button type="reset" onclick="studentdata()" id="submit" data-dismiss="modal">Submit</button>
+                                <button type="reset" onclick="dataAdd()" id="update" class="display-none" data-dismiss="modal">Update</button>
+                                <button type="reset"> Cancel</button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal2" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Teacher Form</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="m-auto">
+                                <label>First Name:</label>
+                                <input type="text" id="teacherfname" required />
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Last Name:</label>
+                                <input type="text" id="teacherlname" required />
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Email:</label>
+                                <input type="email" id="teacheremail" required />
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Phone:</label>
+                                <input type="tel" id="teacherphone" maxlength="10" required pattern="^\d{10}$" />
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Standard:</label>
+                                <select name="teacherstd" id="teacherstd">
+                                    <option value="one">1</option>
+                                    <option value="two">2</option>
+                                    <option value="three">3</option>
+                                    <option value="four">4</option>
+                                    <option value="five">5</option>
+                                    <option value="six">6</option>
+                                    <option value="seven">7</option>
+                                    <option value="eight">8</option>
+                                    <option value="nine">9</option>
+                                    <option value="ten">10</option>
+                                    <option value="eleven">11</option>
+                                    <option value="twelve">12</option>
+                                </select>
+                            </div>
+
+                            <div class="m-auto">
+                                <label>Gender:</label>
+                                <input type="radio" id="teacherfemale" name="tgender" value="female" />
+                                <label for="teacherfemale">Female</label>
+                                <input type="radio" id="teachermale" name="tgender" value="male" />
+                                <label for="teachermale">male</label>
+                            </div>
+                            
+                            <div class="m-auto">
+                                <label>Subject:</label>
+                                <input type="checkbox" id="subject1" name="subject1" value="match">
+                                <label for="subject1"> Match</label>
+                                <input type="checkbox" id="subject2" name="subject2" value="science">
+                                <label for="subject2"> Science </label>
+                                <input type="checkbox" id="subject3" name="subject3" value="sanskrit">
+                                <label for="subject3"> Sanskrit </label>
+                                <input type="checkbox" id="subject4" name="subject4" value="gujrati">
+                                <label for="subject4"> Gujrati </label>
+                            </div>
+
+                            <div class="btns teacher-btn">
+                                <button type="reset" onclick="teacherdata()" id="submit" data-dismiss="modal">Submit</button>
+                                <button type="reset" onclick="teacherDataAdd()" id="update" class="display-none" data-dismiss="modal">Update</button>
+                                <button type="reset"> Cancel</button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" onclick="studentDetails()">Show Students</button>
+    <button type="button" onclick="teacherDetails()">Show Teachers</button>
+
+    <div class="label-right">
+        <label for="searchFilter">Find Some</label>
+        <input type="search" id="searchFilter" onkeyup="searchStart()" placeholder="Type to search..."/>
+    </div>
+
+    <div>
+        <table id="schoolData" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Edit Details</th>
+                    <th>Delete</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email </th>
+                    <th>Phone No</th>
+                    <th>Standerd</th>
+                    <th>Gender</th>
+                    <th>Subject</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+
+        let db = [{
+            student: [],
+            teacher: []
+        }];
+
+        function studentdata() {
+            let firstname = $('#fname').val();
+            let lastname = $('#lname').val();
+            let email = $('#email').val();
+            let phoneno = $('#phone').val();
+            let std = $('#standar').val();
+            let gender = $('input[name="gender"]:checked').val() || '';
+
+            person = {
+                firstname: firstname,
+                lastname: lastname,
+                email: email,
+                phoneno: phoneno,
+                std: std,
+                gender: gender
+            };
+
+            db[0].student.push(person);
+            console.log(db[0].student);
+            console.log(db);
+
+            $('#fname').val("");
+            $('#lname').val("");
+            $('#email').val("");
+            $('#phone').val("");
+            $('#standar').val("one");
+            $('input[name="gender"]:checked').prop('checked', false);
+        };
+
+        function studentDetails() {
+            $('#schoolData tbody').empty();
+
+            for (let i = 0; i < db[0].student.length; i++) {
+                let student = db[0].student[i];
+                var newRow = "";
+                newRow = "<tr><td><button class='Update-student' onclick='updateDataStudent(" + i + ")'> Edit </button> </td> <td> <button class='Delete-student' onclick='deleteDataStudent(" + i + ")'> Delete</button></td><td>" + student.firstname + "</td><td>" + student.lastname + "</td><td>" + student.email + "</td><td>" + student.phoneno + "</td><td>" + student.std + "</td><td>" + student.gender + "</td></tr>";
+                $('#schoolData tbody').append(newRow);
+            };
+        };
+
+        let indexValue;
+        function updateDataStudent(value) {
+            $('#openModalBtn').click();
+            $('#submit').addClass('display-none');
+            $('#update').removeClass('display-none');
+
+            indexValue = value;
+            let student = db[0].student[value];
+
+            $('#fname').val(student.firstname);
+            $('#lname').val(student.lastname);
+            $('#email').val(student.email);
+            $('#phone').val(student.phoneno);
+            $('#standar').val(student.std);
+            $('input[name="gender"][value="' + student.gender + '"]').prop('checked', true);
+        };
+
+        function dataAdd() {
+            let firstname = $('#fname').val();
+            let lastname = $('#lname').val();
+            let email = $('#email').val();
+            let phoneno = $('#phone').val();
+            let std = $('#standar').val();
+            let gender = $('input[name="gender"]:checked').val() || '';
+
+            if (indexValue == undefined) {
+                db[0].student.push({
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                    phoneno: phoneno,
+                    std: std,
+                    gender: gender
+                });
+            }
+            else {
+                db[0].student[indexValue] = {
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                    phoneno: phoneno,
+                    std: std,
+                    gender: gender
+                };
+                indexValue = null;
+            };
+
+            $('#submit').removeClass('display-none');
+            $('#update').addClass('display-none');
+
+            $('#fname').val("");
+            $('#lname').val("");
+            $('#email').val("");
+            $('#phone').val("");
+            $('#standar').val("one");
+            $('input[name="gender"]:checked').prop('checked', false);
+            studentDetails();
+        };
+
+        let subjectSearch;
+        function teacherdata() {
+            let firstname = $('#teacherfname').val();
+            let lastname = $('#teacherlname').val();
+            let email = $('#teacheremail').val();
+            let phoneno = $('#teacherphone').val();
+            let std = $('#teacherstd').val();
+            let gender = $('input[name="tgender"]:checked').val() || '';
+            let subject = [];
+            $('input[type="checkbox"]:checked').each(function () {
+                subject.push($(this).val());
+            });
+            subjectSearch = subject;
+            person = {
+                firstname: firstname,
+                lastname: lastname,
+                email: email,
+                phoneno: phoneno,
+                std: std,
+                gender: gender,
+                subject: subject
+            };
+            db[0].teacher.push(person);
+            console.log(db);
+
+            $('#teacherfname').val("");
+            $('#teacherlname').val("");
+            $('#teacheremail').val("");
+            $('#teacherphone').val("");
+            $('#teacherstd').val("one");
+            $('input[name="tgender"]:checked').prop('checked', false);
+            $('input[type="checkbox"]').prop('checked', false);
+        };
+
+        function teacherDetails() {
+            $('#schoolData tbody').empty();
+
+            for (let i = 0; i < db[0].teacher.length; i++) {
+                let teacher = db[0].teacher[i];
+                var newRow = "";
+    /*            newRow = "<th>Subjects</th>";
+                $('#schoolData thead tr:last').append(newRow);*/
+                newRow = "<tr><td><button class='Update-Teacher' onclick='updateDataTeacher(" + i + ")'> Edit </button> </td> <td> <button class='Delete-Teacher' onclick='deleteDataTeacher(" + i + ")'> Delete</button></td><td>" + teacher.firstname + "</td><td>" + teacher.lastname + "</td><td>" + teacher.email + "</td><td>" + teacher.phoneno + "</td><td>" + teacher.std + "</td><td>" + teacher.gender + "</td><td>" + teacher.subject + "</td></tr>";
+                $('#schoolData tbody').append(newRow);
+            };
+        };
+
+        let TeacherindexValue;
+        function updateDataTeacher(value) {
+            $('#openTeacherBtn').click();
+            $('.teacher-btn #submit').addClass('display-none');
+            $('.teacher-btn #update').removeClass('display-none');
+
+            TeacherindexValue = value;
+            let teacher = db[0].teacher[value];
+
+            $('#teacherfname').val(teacher.firstname);
+            $('#teacherlname').val(teacher.lastname);
+            $('#teacheremail').val(teacher.email);
+            $('#teacherphone').val(teacher.phoneno);
+            $('#teacherstd').val(teacher.std);
+            $('input[name="tgender"][value="' + teacher.gender + '"]').prop('checked', true);
+            $('input[type="checkbox"]').prop('checked', false);
+            teacher.subject.forEach(function (subj) {
+                $('input[type="checkbox"][value="' + subj + '"]').prop('checked', true);
+            });
+        };
+
+        function teacherDataAdd() {
+            let firstname = $('#teacherfname').val();
+            let lastname = $('#teacherlname').val();
+            let email = $('#teacheremail').val();
+            let phoneno = $('#teacherphone').val();
+            let std = $('#teacherstd').val();
+            let gender = $('input[name="tgender"]:checked').val() || '';
+            let subject = [];
+            $('input[type="checkbox"]:checked').each(function () {
+                subject.push($(this).val());
+            });
+
+            if (TeacherindexValue == undefined) {
+                db[0].teacher.push({
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                    phoneno: phoneno,
+                    std : std,
+                    gender: gender,
+                    subject : subject
+                });
+            }
+            else {
+                db[0].teacher[TeacherindexValue] = {
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                    phoneno: phoneno,
+                    std : std,
+                    gender: gender,
+                    subject: subject
+                };
+                TeacherindexValue = null;
+            };
+
+            $('.teacher-btn #submit').removeClass('display-none');
+            $('.teacher-btn #update').addClass('display-none');
+
+            $('#teacherfname').val("");
+            $('#teacherlname').val("");
+            $('#teacheremail').val("");
+            $('#teacherphone').val("");
+            $('#teacherstd').val("one");
+            $('input[name="tgender"]:checked').prop('checked', false);
+            $('input[type="checkbox"]').prop('checked', false);
+            teacherDetails();
+        };
+
+        function deleteDataTeacher(value) {
+            console.log(db[0].teacher[value]);
+            db[0].teacher.splice(value, 1);
+            teacherDetails();
+        };
+
+        function deleteDataStudent(value) {
+            console.log(db[0].student[value]);
+            db[0].student.splice(value, 1);
+            studentDetails();
+        };
+
+        function searchStart() {
+            let filterData = $('#searchFilter').val();
+            console.log(filterData);
+            let filterText = filterData.toLowerCase();
+
+            let rows = $("#schoolData tbody tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                let row = rows[i];
+                let rowText = $(row).find('td:nth-of-type(7)').text().toLowerCase();
+                
+                if (rowText.includes(filterText)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            };
+            
+        };
+    </script>
+</body>
+</html>

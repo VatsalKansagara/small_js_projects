@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .calc-start{
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        input{
+            padding: 10px;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 10px;
+        }
+        td{
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <div class="calc-start">
+        <table id="calcData">
+            <thead>
+                <tr>
+                    <th colspan="4">
+                        <input type="text" id="calcInput"/>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>+</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td>/</td>
+                    <td>0</td>
+                    <td>.</td>
+                    <td>=</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Clear All</td>
+                    <td>Del</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p id="history"></p>
+    </div>
+
+    <script>
+        let textValue;
+        let firstValue;
+        let secondValue;
+        let icon;
+        let totalValue;
+        let historyText = "";
+
+        $('#calcData td').click(function(){
+            textValue = $(this).text();
+            console.log(textValue);
+
+            if (textValue === '+' || textValue === '-' || textValue === '*' || textValue === '/') {
+                firstValue = parseFloat($('#calcInput').val());
+                $('#calcInput').val();
+                icon = textValue;
+                console.log("firstvalue" + firstValue);
+                $('#calcInput').val(icon);               
+                return;
+            }; 
+
+            let l = $('#calcInput').val();
+            if (l == '/' || l == '*' || l == '+' || l == '-') {
+                if (textValue === '1' || textValue === '2' || textValue === '3' || textValue === '4' || textValue === '5' || textValue === '6' || textValue === '7' || textValue === '8' || textValue === '9' || textValue === '0') {
+                    $('#calcInput').val('');
+                    $('#calcInput').val(textValue);
+                };
+                return;
+            };
+
+            if (textValue === '+' || textValue === '-' || textValue === '*' || textValue === '/') {
+                console.log("hello");
+            };
+
+            if (textValue === '=') {
+                let secondValue = parseFloat($('#calcInput').val());
+                console.log("secondvalue" +secondValue);
+                console.log(typeof (secondValue));
+                $('#calcInput').val('');
+                let TotalText;
+
+                if (icon === '+') {
+                    totalValue = firstValue + secondValue;
+                }else if (icon === '-') {
+                    totalValue = firstValue - secondValue;
+                }else if (icon === '*') {
+                    totalValue = firstValue * secondValue;
+                }else if (icon === '/') {
+                    totalValue = firstValue / secondValue;
+                }else if(icon == undefined) {
+                    totalValue = secondValue;
+                };
+
+                TotalText = firstValue + " " + icon + " " + secondValue + " = " + totalValue;
+                historyText += TotalText + "<br>";
+                $('#calcInput').val(totalValue);
+                $('#history').html(historyText);
+                return;
+            };
+
+            if (totalValue >= 0) {
+                if (textValue === '1' || textValue === '2' || textValue === '3' || textValue === '4' || textValue === '5' || textValue === '6' || textValue === '7' || textValue === '8' || textValue === '9' || textValue === '0') {
+                    $('#calcInput').val('');
+                    totalValue = undefined;
+                };
+            };
+
+            if (textValue === "Del") {
+                let delValue = $('#calcInput').val();
+                let final = delValue.slice(0 , -1);
+                $('#calcInput').val(final);
+                return;
+            };
+
+            if(textValue === "Clear All") {
+                $('#calcInput').val('');
+                firstValue = undefined;
+                secondValue = undefined;
+                icon = undefined;
+                return;
+            };
+
+            let calcInput = $('#calcInput').val();
+            $('#calcInput').val(calcInput + textValue);
+        });
+
+    </script>
+</body>
+</html>

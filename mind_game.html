@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+        .mind-game {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .card{
+            background-color: aqua;
+            border-radius: 10px;
+            height: 80px;
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        i {
+            font-size: 30px;
+            transform:rotateY(90deg);
+        }
+
+        .winner{
+            transform:rotateY(0deg)!important;
+        }
+
+        button{
+            width: 200px;
+            padding: 15px;
+            margin: 0 5px;
+        }
+
+        .btn {
+            margin-top: 25px;
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <div class="mind-game">
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+    </div>
+
+    <div class="btn">
+        <button onclick="watch()">Watch Card</button>
+        <button onclick="giveUp()">Give Up</button>
+        <button onclick="start()">Start</button>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            let card = $('.card');
+            let iconData = [
+                "fa-regular fa-sun",
+                "fa-solid fa-bicycle",
+                "fa-regular fa-star",
+                "fa-solid fa-bolt",
+                "fa-solid fa-bomb",
+                "fa-solid fa-leaf",
+                "fa-solid fa-book",
+                "fa-brands fa-dribbble",
+                "fa-regular fa-sun",
+                "fa-solid fa-bicycle",
+                "fa-regular fa-star",
+                "fa-solid fa-bolt",
+                "fa-solid fa-bomb",
+                "fa-solid fa-leaf",
+                "fa-solid fa-book",
+                "fa-brands fa-dribbble"
+            ];
+
+            let icons = [];
+            while(icons.length < 16) {
+                let randomPos = Math.floor(Math.random() * card.length);
+                console.log(randomPos);
+                if (!icons.includes(randomPos)) {
+                    icons.push(randomPos);
+                }
+            };
+
+            let i = 0;
+            icons.forEach((pos) => {
+                $(card[pos]).html("<i class='"+iconData[i]+"'></i>");
+                i++;
+            });
+
+            let b = 1;
+            let icon;
+            let cardOpen = [];
+            $('.card').click(function () {
+
+                if (b <= 2) {
+                    icon = $(this).find('i');
+                    icon.css("transform", "rotateY(0deg)");
+                    icon.attr("target" , "5");
+                    let data = icon.attr('class');
+                    cardOpen.push(data);
+                    b++;
+                };
+                setTimeout(function () {
+                    if (b == 3) {
+                        if (cardOpen.length == 2) {
+                            if (cardOpen[0] == cardOpen[1]) {
+                                $('i[target="5"]').each(function () {
+                                    $(this).addClass("winner");
+                                });
+
+                                if ($('i.winner').length === iconData.length) {
+                                    alert("Congratulations! You've matched all the cards!");
+                                    window.location.reload();
+                                };
+                            } else {
+                                let p = $('.card').find('i');
+                                p.css("transform", "rotateY(90deg)");
+                                p.attr("target", "0");
+                                p.removeClass("winner");
+                            };
+                            cardOpen = [];
+                        }
+                        b = 1;
+                    }
+                }, 2000);
+            });
+
+        });
+        function giveUp() {
+            let p = $('.card').find('i');
+            p.css("transform", "rotateY(0deg)");
+        };
+        function start() {
+            let p = $('.card').find('i');
+            p.css("transform", "rotateY(90deg)");
+            window.location.reload();
+        };
+        function watch() {
+            giveUp();
+            setTimeout(function () {
+                let p = $('.card').find('i');
+                p.css("transform", "rotateY(90deg)");
+            }, 5000);
+        };
+    </script>
+</body>
+</html>

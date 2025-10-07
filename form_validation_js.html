@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        body{
+             padding: 0 100px;
+        }
+
+        .m-auto{
+            margin: 10px 0;
+        }
+
+        label {
+            width: 100%;
+        }
+
+        form{
+            width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0000001A;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        button{
+            padding: 5px 10px;
+        }
+
+        #userdata{
+            margin-top: 50px;
+        }
+
+        .user-select{
+            margin: 25px 0;
+        }
+
+        .user-details {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="sample-form">
+        <form id="form-start">
+            <div class="m-auto">
+                <label>First Name:</label>
+                <input type="text" id="fname" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Last Name:</label>
+                <input type="text" id="lname" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Email:</label>
+                <input type="email" id="email" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Phone:</label>
+                <input type="tel" id="phone" maxlength="10" required pattern="^\d{10}$" />
+            </div>
+
+            <div class="m-auto">
+                <label>Address:</label>
+                <input type="text" id="address" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Date of Birth:</label>
+                <input type="date" id="dob" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Gender:</label>
+                <input type="radio" id="female" name="gender" value="female" />
+                <label for="female">Female</label>
+                <input type="radio" id="male" name="gender" value="male" />
+                <label for="male">male</label>
+            </div>
+
+            <div class="m-auto">
+                <label>City:</label>
+                <select id="city">
+                    <option>Surat</option>
+                    <option>Rajkot</option>
+                    <option>Baroda</option>
+                </select>
+            </div>
+
+            <div class="m-auto">
+                <label>Hobbies:</label>
+                <input type="checkbox" name="reading" id="reading" /><label for="reading">reading</label>
+                <input type="checkbox" name="swimming" id="swimming" /><label for="swimming">swimming</label>
+                <input type="checkbox" name="walking" id="walking" /><label for="walking">walking</label>
+            </div>
+
+            <div class="btns">
+                <button type="button" onclick="formdata()">Submit</button>
+                <button type="reset"> Cancel</button>
+            </div>
+        </form>
+
+    </div>
+
+    <div>
+        <table id="userdata" style="width:100%">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>Hobbies</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="user-select">
+        <label>All Users:</label>
+        <select id="userSelect" onchange="showUserDetails()">
+            <option>Select a User</option>
+        </select>
+    </div>
+
+    <div class="user-details" id="userDetailsContainer">
+
+    </div>
+
+    <script>
+
+        let userCount = 0;
+       let usersData = [];
+
+        function formdata() {
+           let firstname = document.getElementById('fname').value;
+           let lastname = document.getElementById('lname').value;    
+           let email = document.getElementById('email').value;
+           let phoneno = document.getElementById('phone').value;
+           let address = document.getElementById('address').value;
+           let dob = document.getElementById('dob').value;
+           let city = document.getElementById('city').value;
+
+           let gender = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : '';
+           let reading = document.getElementById('reading').checked ? 'reading' : '';
+           let swimming = document.getElementById('swimming').checked ? 'swimming' : '';
+           let walking = document.getElementById('walking').checked ? 'walking' : '';
+
+            if (!firstname || !lastname || !email || !phoneno || !address || !city || !dob || !gender) {
+                alert("All fields are required!");
+                return;
+            }
+
+            userCount++;
+
+           let table = document.getElementById('userdata').getElementsByTagName('tbody')[0];
+           let newRow = table.insertRow();
+
+            newRow.innerHTML = `
+                       <td>${userCount}</td>
+                       <td>${firstname}</td>
+                       <td>${lastname}</td>
+                       <td>${email}</td>
+                       <td>${phoneno}</td>
+                       <td>${address}</td>
+                       <td>${dob}</td>
+                       <td>${gender}</td>
+                       <td>${city}</td>
+                       <td>${[reading, swimming, walking].filter(Boolean).join(', ')}</td>
+                `;
+
+           // usersData.push({ firstname, lastname, email, address, phoneno, city, dob, gender, hobbies: [reading, swimming, walking].filter(Boolean).join(', ') });
+
+           let userSelect = document.getElementById('userSelect');
+           let option = document.createElement('option');
+            option.text = firstname;
+            userSelect.add(option);
+
+            document.querySelector('#form-start').reset();
+        }
+
+        function showUserDetails() {
+           let userSelect = document.getElementById('userSelect');
+           let selectedName = userSelect.value;
+
+            if (selectedName === "Select a user") {
+                document.getElementById('userDetailsContainer').innerHTML = '';
+                return;
+            }
+
+           let user = usersData.find(u => u.firstname === selectedName);
+            if (user) {
+                document.getElementById('userDetailsContainer').innerHTML = `
+                                <h3>User Details:</h3>
+                                <p><strong>Username:</strong> ${user.name}</p>
+                                <p><strong>Email:</strong> ${user.email}</p>
+                                <p><strong>Address:</strong> ${user.address}</p>
+                                <p><strong>State:</strong> ${user.state}</p>
+                                <p><strong>City:</strong> ${user.city}</p>
+                                <p><strong>Date of Birth:</strong> ${user.dob}</p>
+                                <p><strong>Contact Number:</strong> ${user.number}</p>
+                                <p><strong>Gender:</strong> ${user.gender}</p>
+                                <p><strong>Hobbies:</strong> ${user.hobbies}</p>
+                            `;
+            }
+        }
+    </script>
+</body>
+</html>

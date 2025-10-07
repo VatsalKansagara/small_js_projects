@@ -5,29 +5,19 @@
     <meta charset="utf-8" />
     <title></title>
     <style>
-        .stop-watch {
-            text-align: center;
+        .stop-watch{
+            text-align:center;
             font-size: 40px;
         }
 
-        button {
+        button{
             padding: 15px 20px;
             font-size: 25px;
             margin: 0 10px;
         }
 
-        span {
+        span{
             font-size: 20px;
-        }
-
-        h1{
-            margin: 15px 0;
-        }
-
-        input {
-            width: 100px;
-            padding: 10px 15px;
-            font-size: x-large;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -35,41 +25,25 @@
 <body>
 
     <div class="stop-watch">
-        <h1>Enter A Time</h1>
-        <input type="time" id="timeValue" value="00:00"/>
         <p id="time"> 00:00:00 </p>
 
         <button onclick="startTime()">Start</button>
         <button onclick="stopTime()">Stop</button>
         <button onclick="clearTime()">Clear</button>
 
+
     </div>
     <script>
 
         let timer;
         let millisecond = 0;
-
+     
         function startTime() {
-            let inputval = $('#timeValue').val();
-
-            let numberArray = [];
-            for (let x of inputval) {
-                let b = numberArray.push(x);
-            };
-
-            console.log(numberArray);
-
-            let hours = parseInt(numberArray[0] + numberArray[1]);
-            let minute = parseInt(numberArray[3] + numberArray[4]);
-
-            millisecond = ((hours * 60 * 60 + minute * 60) * 1000);
-            
-
-            if (inputval) {
+            if (timer == undefined) {
                 timer = setInterval(function () {
-                    millisecond -= 10;
+                    millisecond += 10;
 
-                    if (millisecond >= 0) {
+                    if (millisecond) {
                         let millise = millisecond % 1000;
                         let second = Math.floor((millisecond / 1000) % 60);
                         let min = Math.floor((millisecond / (1000 * 60)) % 60);
@@ -85,13 +59,13 @@
             timer = undefined;
         }
 
-        function clearTime() {
+        function clearTime() { 
             clearInterval(timer);
             timer = undefined;
             $('#time').html("00:00:00");
             millisecond = 0;
-            $('#timeValue').val("00:00");
         }
     </script>
 </body>
 </html>
+

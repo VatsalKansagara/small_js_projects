@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .sip-system {
+            width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            max-width: 350px;
+            margin: 10px auto;
+            padding: 10px;
+        }
+
+        p {
+            font-size: 25px;
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 10px auto;
+            display: block;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+    <div class="sip-system">
+        <h1>Sip Calculator</h1>
+
+        <p>Monthly investment</p>
+        <input type="text" id="balanceInput" placeholder="Enter Amount 1000 - 100,000" />
+
+        <p>Expected return rate (p.a)</p>
+        <input type="text" id="percentInput" placeholder="Enter Amount 8 - 25" />
+
+        <p>Time period</p>
+        <input type="text" id="yearInput" placeholder="Enter Amount 1Yr - 40Yr" />
+
+        <button onclick="sipcount()">Let's Calculate</button>
+
+        <p id="investedAmount">Invested amount : <span></span></p>
+        <p id="return">Est. returns : <span></span></p>
+        <p id="totalValue">Total Value:<span></span></p>
+    </div>
+    <script>
+        function sipcount() {
+            let investValue = parseInt($('#balanceInput').val());
+            let returnRate = parseInt($('#percentInput').val());
+            let timeOfYear = parseInt($('#yearInput').val());
+
+            if (investValue && returnRate && timeOfYear) {
+                let months = 12 * timeOfYear;
+                let monthlyRate = returnRate / 12 / 100;
+
+                let totalValue = 0;
+                for (let i = 0; i < months; i++) {
+                    totalValue = totalValue * (1 + monthlyRate) + investValue;
+                    console.log(i);
+                };
+
+                let investAmount = investValue * 12 * timeOfYear;
+                let returnValue = totalValue - investAmount;
+                $('#investedAmount span').text(investAmount);
+                $('#return span').text(Math.floor(returnValue));
+                $('#totalValue span').text(Math.floor(totalValue));
+            };
+        };
+    </script>
+</body>
+</html>

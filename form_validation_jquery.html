@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        body {
+            padding: 0 100px;
+        }
+
+        .m-auto {
+            margin: 10px 0;
+        }
+
+        label {
+            width: 100%;
+        }
+
+        #form-start {
+            width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0000001A;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        button {
+            padding: 5px 10px;
+        }
+
+        #userdata {
+            margin-top: 50px;
+        }
+
+        .user-select {
+            margin: 25px 0;
+        }
+
+        .user-details {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid black;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <div class="sample-form">
+        <div id="form-start">
+            <div class="m-auto">
+                <label>First Name:</label>
+                <input type="text" id="fname" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Last Name:</label>
+                <input type="text" id="lname" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Email:</label>
+                <input type="email" id="email" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Phone:</label>
+                <input type="tel" id="phone" maxlength="10" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Address:</label>
+                <input type="text" id="address" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Date of Birth:</label>
+                <input type="date" id="dob" required />
+            </div>
+
+            <div class="m-auto">
+                <label>Gender:</label>
+                <input type="radio" id="female" name="gender" value="female" />
+                <label for="female">Female</label>
+                <input type="radio" id="male" name="gender" value="male" />
+                <label for="male">male</label>
+            </div>
+
+            <div class="m-auto">
+                <label>City:</label>
+                <select id="city" required>
+                    <option value="">Select City</option>
+                    <option value="surat">Surat</option>
+                    <option value="rajkot">Rajkot</option>
+                    <option value="baroda">Baroda</option>
+                </select>
+            </div>
+
+            <div class="m-auto">
+                <label>Hobbies:</label>
+                <input type="checkbox" name="reading" value="reading" id="reading" /><label for="reading">reading</label>
+                <input type="checkbox" name="swimming" value="swimming" id="swimming" /><label for="swimming">swimming</label>
+                <input type="checkbox" name="walking" value="walking" id="walking" /><label for="walking">walking</label>
+            </div>
+
+            <div class="btns">
+                <button type="button" id="formDataSubmit">Submit</button>
+                <button type="reset"> Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <table id="userdata" style="width:100%">
+            <thead>
+                <tr>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>Hobbies</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+        let userCount = 0;
+        let usersData = [];
+
+        function formdata() {
+            let firstname = $('#fname').val();
+            let lastname = $('#lname').val();
+            let email = $('#email').val();
+            let phoneno = $('#phone').val();
+            let address = $('#address').val();
+            let dob = $('#dob').val();
+            let city = $('#city').val();
+
+            let gender = $('input[name="gender"]:checked').val() || '';
+
+            let hobbies = [];
+            $('input[type="checkbox"]:checked').each(function () {
+                hobbies.push($(this).val());
+            });
+       
+            if (!firstname || !lastname) {
+                alert("Enter A Name!");
+                return;
+            }
+
+            let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (!emailPattern.test(email)) {
+                alert("Enter A Valid Email!");
+                return;
+            }
+
+            let numone = phoneno.length;
+            if (numone !== 10) {
+                alert("Enter A Valid Mobile Number!");
+                return;
+            }
+
+            if (!gender) {
+                alert("Please select a gender.");
+                return;
+            }
+
+            if (!city) {
+                alert("Please select a City.");
+                return;
+            }
+
+            if (hobbies.length <= 0 ) {
+                alert("Please select at least one hobby.");
+                return;
+            }
+
+            let newRow = "<tr><td>" + firstname + "</td><td>" + lastname + "</td><td>" + email + "</td><td>" + phoneno + "</td><td>" + address + "</td><td>" + dob + "</td><td>" + gender + "</td><td>" + city + "</td><td>" + hobbies + "</td></tr>";
+            $('#userdata tbody').append(newRow);
+
+            // $('#form-start')[0].reset();
+        }
+
+        $(document).ready(function () {
+            $('#formDataSubmit').click(formdata);
+        });
+    </script>
+</body>
+</html>
