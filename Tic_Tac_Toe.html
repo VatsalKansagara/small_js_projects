@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .game-container{
+            margin: 0 auto;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        table {
+            border-collapse : collapse;
+            margin: 0 auto;
+        }
+
+        table, tr ,td {
+            border: 5px solid #000;
+        }
+        td {
+            height: 100px;
+            width: 100px;
+            font-size: 85px;
+            text-align: center;
+        }
+
+        button{
+            margin-top: 20px;
+            padding: 10px 15px;
+        }
+
+        #winner {
+            font-size: 25px;
+            margin: 10px 0;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+    <div class="game-container">
+        <h2>Game Tic-Tac-Toe</h2>
+
+        <p id="winner"></p>
+        <table border="1" id="gameData">
+            <tbody>
+                <tr>
+                    <td onclick="aBox()"></td>
+                    <td onclick="bBox()"></td>
+                    <td onclick="cBox()"></td>
+                </tr>
+                <tr>
+                    <td onclick="dBox()"></td>
+                    <td onclick="eBox()"></td>
+                    <td onclick="fBox()"></td>
+                </tr>
+                <tr>
+                    <td onclick="gBox()"></td>
+                    <td onclick="hBox()"></td>
+                    <td onclick="iBox()"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="startNewGame()">Start New Game</button>
+    </div>
+
+    <script>
+        let globalVar = 1;
+        let player1 = "0";
+        let player2 = "X";
+        let abox;
+        let bbox;
+        let cbox;
+        let dbox;
+        let ebox;
+        let fbox;
+        let gbox;
+        let hbox;
+        let ibox;
+
+        function aBox() {
+            abox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(0) td:eq(0)').text(abox);            
+            globalVar++;
+            dataBox();
+        }
+        function bBox() {
+            bbox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(0) td:eq(1)').text(bbox);
+            globalVar++;
+            dataBox();
+        }
+        function cBox() {
+            cbox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(0) td:eq(2)').text(cbox);
+            globalVar++;
+            dataBox();
+        }
+        function dBox() {
+            dbox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(1) td:eq(0)').text(dbox);
+            globalVar++;
+            dataBox();
+        }
+        function eBox() {
+            ebox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(1) td:eq(1)').text(ebox);
+            globalVar++;
+            dataBox();
+        }
+        function fBox() {
+            fbox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(1) td:eq(2)').text(fbox);
+            globalVar++;
+            dataBox();    
+        }
+        function gBox() {
+            gbox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(2) td:eq(0)').text(gbox);
+            globalVar++;
+            dataBox();
+        }
+        function hBox() {
+            hbox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(2) td:eq(1)').text(hbox);
+            globalVar++;
+            dataBox();
+        }
+        function iBox() {
+            ibox = globalVar % 2 == 0 ? player2 : player1;
+            $('#gameData tbody tr:eq(2) td:eq(2)').text(ibox);
+            globalVar++;
+            dataBox();
+        }
+
+        function dataBox() {
+            if (abox == 0 && bbox == 0 && cbox == 0) {
+                $("#winner").text("Player 1 O Is Win");
+            }
+            if (dbox == 0 && ebox == 0 && fbox == 0) { 
+                $("#winner").text("Player 1 O Is Win");
+            }
+            if (gbox == 0 && hbox == 0 && ibox == 0) {
+                $("#winner").text("Player 1 O Is Win");
+            }
+            if (abox == 0 && dbox == 0 && gbox == 0) {
+                $("#winner").text("Player 1 O Is Win");
+            }
+            if (bbox == 0 && ebox == 0 && hbox == 0) {
+                $("#winner").text("Player 1 O Is Win");
+            }
+            if (cbox == 0 && fbox == 0 && ibox == 0) {
+                $("#winner").text("Player 1 O Is Win");
+            }
+            if (abox == 0 && ebox == 0 && ibox == 0) {
+                $("#winner").text("Player 1 O Is Win");
+            }
+            if (cbox == 0 && ebox == 0 && gbox == 0) {
+                $("#winner").text("Player 1 O Is Win");
+            }
+            if (abox == "X" && bbox == "X" && cbox == "X") {
+                $("#winner").text("Player 2 X Is Win");
+            }
+            if (dbox == "X" && ebox == "X" && fbox == "X") {
+                $("#winner").text("Player 2 X Is Win");
+            }
+            if (gbox == "X" && hbox == "X" && ibox == "X") {
+                $("#winner").text("Player 2 X Is Win");
+            }
+            if (abox == "X" && dbox == "X" && gbox == "X") {
+                $("#winner").text("Player 2 X Is Win");
+            }
+            if (bbox == "X" && ebox == "X" && hbox == "X") {
+                $("#winner").text("Player 2 X Is Win");
+            }
+            if (cbox == "X" && fbox == "X" && ibox == "X") {
+                $("#winner").text("Player 2 X Is Win");
+            }
+            if (abox == "X" && ebox == "X" && ibox == "X") {
+                $("#winner").text("Player 2 X Is Win");
+            }
+            if (cbox == "X" && ebox == "X" && gbox == "X") {
+                $("#winner").text("Player 2 X Is Win");
+            }
+        };
+
+        function startNewGame(){
+            $("#gameData td").text('');
+            abox = undefined;
+            bbox = undefined;
+            cbox = undefined;
+            dbox = undefined;
+            ebox = undefined;
+            fbox = undefined;
+            gbox = undefined;
+            hbox = undefined;
+            ibox = undefined;
+            globalVar = 1;
+            $("#winner").text(" ");
+        }
+    </script>
+</body>
+</html>
