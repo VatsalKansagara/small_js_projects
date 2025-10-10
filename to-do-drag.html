@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag Drop Todo</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            padding: 30px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        /* --- New styles for add task section --- */
+        .add-task-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+            .add-task-container input {
+                flex-grow: 1;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                font-size: 16px;
+            }
+
+            .add-task-container button {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+                .add-task-container button:hover {
+                    background-color: #0056b3;
+                }
+        /* -------------------------------------- */
+
+        ul.todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 800px;
+            position: relative;
+        }
+
+            ul.todo-list li {
+                background: #fff;
+                margin: 5px 0;
+                padding: 12px 15px;
+                border-radius: 6px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                cursor: grab;
+                transition: opacity 0.3s, box-shadow 0.3s;
+                width: auto;
+                display: flex; /* Use flexbox for alignment */
+                align-items: center;
+            }
+
+        .task-number {
+            font-weight: bold;
+            color: #555;
+            margin-right: 10px; /* Space between number and text */
+            min-width: 20px; /* Ensures consistent alignment */
+        }
+
+        .remove {
+            margin-left: auto; /* Pushes the button to the right */
+            cursor: pointer;
+            color: red;
+        }
+
+        /* When dragging, apply styles to the dragged item */
+        ul.todo-list li.dragging {
+            opacity: 1 !important;
+            filter: none !important;
+            background-color: #e6f0ff;
+            border: 2px dashed #2e2eb8;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .todo-placeholder {
+            height: 40px;
+            margin: 5px 0;
+            border: 2px dashed #2e2eb8;
+            border-radius: 6px;
+            background: #f0f4ff;
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Todo List (Drag & Drop)</h2>
+    <div class="add-task-container">
+        <input type="text" id="new-task-input" placeholder="Enter a new task...">
+        <button id="add-task-btn">Add Task</button>
+    </div>
+    <ul class="todo-list">
+        <li id="task1" class="sortable-item" draggable="true">Task 1 <span class="remove">❌</span></li>
+        <li id="task2" class="sortable-item" draggable="true">Task 2 <span class="remove">❌</span></li>
+        <li id="task3" class="sortable-item" draggable="true">Task 3 <span class="remove">❌</span></li>
+        <li id="task4" class="sortable-item" draggable="true">Task 4 <span class="remove">❌</span></li>
+        <li id="task5" class="sortable-item" draggable="true">Task 5 <span class="remove">❌</span></li>
+    </ul>
+
+    <script>
+        $(document).ready(function () {
+            let dragItem = null;
+            let placeholder = $('<li class="todo-placeholder"></li>');
+            let offsetX = 0;
+            let offsetY = 0;
+
+            // Function to update the numbers on all list items
+            function updateNumbers() {
+                $('.todo-list li').each(function (index) {
+                    let taskText = $(this).text().replace(/^\d+\. /, '').trim();
+                    $(this).html(`<span class="task-number">${index + 1}.</span> ${taskText}`);
+                });
+            }
+
+            // --- New logic for adding tasks ---
+          
+            // ---------------------------------
+
+            // Initial numbering of the list
+            updateNumbers();
+
+            $(document).on("mousedown", ".todo-list li", function (e) {
+                dragItem = $(this);
+
+                const parentRect = dragItem.parent()[0].getBoundingClientRect();
+                const rect = dragItem[0].getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+
+                placeholder.height(rect.height);
+                dragItem.after(placeholder);
+
+                dragItem.css({
+                    position: 'absolute',
+                    left: rect.left - parentRect.left + 'px',
+                    top: rect.top - parentRect.top + 'px',
+                    width: rect.width + 'px',
+                    zIndex: 1000,
+                    cursor: 'grabbing',
+                    boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+                    transform: 'scale(1.05)'
+                });
+
+                dragItem.addClass('dragging');
+                document.body.style.userSelect = 'none';
+
+                $(document).on("mousemove.drag", onMouseMove);
+                $(document).on("mouseup.drag", onMouseUp);
+
+                e.preventDefault();
+            });
+
+            function onMouseMove(e) {
+                if (!dragItem) return;
+                const parentRect = dragItem.parent()[0].getBoundingClientRect();
+
+                dragItem.css({
+                    left: e.clientX - parentRect.left - offsetX + 'px',
+                    top: e.clientY - parentRect.top - offsetY + 'px'
+                });
+
+                let inserted = false;
+                $(".todo-list li").not(dragItem).not(".todo-placeholder").each(function () {
+                    const rect = this.getBoundingClientRect();
+                    if (e.clientY < rect.top + rect.height / 2) {
+                        $(this).before(placeholder);
+                        inserted = true;
+                        return false;
+                    }
+                });
+                if (!inserted) {
+                    $(".todo-list").append(placeholder);
+                }
+            }
+
+            function onMouseUp() {
+                if (!dragItem) return;
+
+                placeholder.replaceWith(dragItem);
+
+                dragItem.css({
+                    position: 'relative',
+                    left: '',
+                    top: '',
+                    width: '',
+                    zIndex: '',
+                    cursor: 'grab',
+                    boxShadow: '',
+                    transform: ''
+                });
+
+                dragItem.removeClass('dragging');
+                document.body.style.userSelect = '';
+
+                // Update numbers after dropping the item
+                updateNumbers();
+
+                $(document).off("mousemove.drag mouseup.drag");
+                dragItem = null;
+            }
+
+            // Remove task
+            $(document).on("click", ".remove", function () {
+                $(this).closest("li").remove();
+                // Update numbers after removing an item
+                updateNumbers();
+            });
+        });
+    </script>
+</body>
+</html>

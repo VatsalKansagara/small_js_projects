@@ -1,0 +1,334 @@
+﻿<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collapsible Sidebar with Hold</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            display: flex;
+        }
+
+        .sidebar {
+            background: #222;
+            color: #fff;
+            height: 100vh;
+            width: 50px;
+            transition: width 0.3s ease;
+            overflow: hidden;
+        }
+
+            .sidebar.expanded {
+                width: 250px;
+            }
+
+        .menu-item {
+            padding: 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+        }
+
+            .menu-item:hover {
+                background-color: #333;
+            }
+
+        .submenu {
+            background: #444;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+            .submenu.show {
+                max-height: 200px;
+            }
+
+            .submenu a {
+                display: block;
+                padding: 10px 20px;
+                color: #ccc;
+                text-decoration: none;
+            }
+
+                .submenu a:hover {
+                    background: #555;
+                }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar" id="sidebar">
+        <div class="menu-item" onclick="toggleSubmenu()">📁 Menu 1</div>
+        <div class="submenu" id="submenu">
+            <a href="#">Submenu 1</a>
+            <a href="#">Submenu 2</a>
+        </div>
+
+        <div class="menu-item">⚙️ Menu 2</div>
+        <div class="menu-item">📊 Menu 3</div>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const submenu = document.getElementById("submenu");
+
+        // Sidebar expands on hover unless submenu is open
+        sidebar.addEventListener("mouseenter", () => {
+            if (!submenu.classList.contains("show")) {
+                sidebar.classList.add("expanded");
+            }
+        });
+
+        sidebar.addEventListener("mouseleave", () => {
+            if (!submenu.classList.contains("show")) {
+                sidebar.classList.remove("expanded");
+            }
+        });
+
+        // Toggle submenu on click
+        function toggleSubmenu() {
+            submenu.classList.toggle("show");
+
+            if (submenu.classList.contains("show")) {
+                sidebar.classList.add("expanded");
+            } else {
+                sidebar.classList.remove("expanded");
+            }
+        }
+    </script>
+
+</body>
+</html>-->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sidebar Expand on Mouse Events</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            display: flex;
+        }
+
+        .sidebar {
+            background: #222;
+            color: #fff;
+            height: 100vh;
+            width: 50px;
+            overflow: hidden;
+            transition: width 0.3s ease;
+        }
+
+            .sidebar.expanded {
+                width: 250px;
+            }
+
+        .menu-item {
+            padding: 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+        }
+
+            .menu-item:hover {
+                background-color: #333;
+            }
+
+        .submenu {
+            background: #444;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+            .submenu.show {
+                max-height: 200px;
+            }
+
+            .submenu a {
+                display: block;
+                padding: 10px 20px;
+                color: #ccc;
+                text-decoration: none;
+            }
+
+                .submenu a:hover {
+                    background: #555;
+                }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar" id="sidebar">
+        <div class="menu-item"
+             onmouseenter="menuIn()"
+             onmouseleave="menuOut()"
+             onclick="toggleSubmenu()">
+            📁 Menu 1
+        </div>
+
+        <div class="submenu" id="submenu">
+            <a href="#">Submenu 1</a>
+            <a href="#">Submenu 2</a>
+        </div>
+
+        <div class="menu-item"
+             onmouseenter="menuIn()"
+             onmouseleave="menuOut()">
+            ⚙️ Menu 2
+        </div>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const submenu = document.getElementById("submenu");
+
+        function menuIn() {
+            sidebar.classList.add("expanded");
+        }
+
+        function menuOut() {
+            // Only collapse if submenu is not open
+            if (!submenu.classList.contains("show")) {
+                sidebar.classList.remove("expanded");
+            }
+        }
+
+        function toggleSubmenu() {
+            submenu.classList.toggle("show");
+
+            if (submenu.classList.contains("show")) {
+                sidebar.classList.add("expanded");
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collapsible Sidebar</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 50px;
+      background: #333;
+      color: white;
+      height: 100vh;
+      transition: width 0.3s;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .sidebar:hover,
+    .sidebar.expanded {
+      width: 250px;
+    }
+
+    .menu-item {
+      padding: 15px;
+      cursor: pointer;
+      border-bottom: 1px solid #444;
+    }
+
+    .menu-item:hover {
+      background-color: #444;
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: #555;
+    }
+
+    .submenu a {
+      display: block;
+      padding: 10px 20px;
+      color: #ddd;
+      text-decoration: none;
+    }
+
+    .submenu a:hover {
+      background: #666;
+    }
+
+    .submenu.open {
+      max-height: 500px; /* enough height for your submenu items */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <div class="menu-item" onclick="toggleSubmenu()">Menu 1</div>
+    <div class="submenu" id="submenu">
+      <a href="#">Submenu 1</a>
+      <a href="#">Submenu 2</a>
+    </div>
+    <div class="menu-item">Menu 2</div>
+    <div class="menu-item">Menu 3</div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const submenu = document.getElementById('submenu');
+
+    function toggleSubmenu() {
+      submenu.classList.toggle('open');
+
+      if (submenu.classList.contains('open')) {
+        sidebar.classList.add('expanded');
+      } else {
+        sidebar.classList.remove('expanded');
+      }
+    }
+  </script>
+
+</body>
+</html>-->

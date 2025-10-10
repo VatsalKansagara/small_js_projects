@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <title>Image to Base64 (High Quality)</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        #preview {
+            margin-top: 20px;
+            max-width: 100%;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>PNG/JPG ઈમેજને Base64 (High Quality) માં ફેરવો</h2>
+
+    <input type="file" id="imageInput" accept="image/png, image/jpeg">
+    <br><br>
+
+    <canvas id="canvas" style="display:none;"></canvas>
+    <img id="preview" alt="Preview">
+
+    <textarea id="base64Output" placeholder="અહીં Base64 code આવશે..."></textarea>
+
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    // High quality canvas settings
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Set canvas size same as image's natural size
+                    canvas.width = img.naturalWidth;
+                    canvas.height = img.naturalHeight;
+
+                    // OPTIONAL: Prevent blur on scaled images (logos/icons)
+                    ctx.imageSmoothingEnabled = false;
+
+                    // Draw image at full quality
+                    ctx.drawImage(img, 0, 0);
+
+                    // Convert to Base64 (PNG)
+                    const base64 = canvas.toDataURL('image/png');
+
+                    // Show preview
+                    document.getElementById('preview').src = base64;
+
+                    // Show base64 output
+                    document.getElementById('base64Output').value = base64;
+                };
+                img.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        });
+    </script>
+
+</body>
+</html>

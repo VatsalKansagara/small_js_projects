@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple MP3 Recorder with lamejs</title>
+    <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            text-align: center;
+        }
+
+        #recordBtn {
+            font-size: 48px;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+            #recordBtn.recording {
+                color: red;
+            }
+
+        audio {
+            margin-top: 20px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Audio Recorder</h2>
+    <button id="recordBtn">Start Recording</button>
+    <div id="audioContainer"></div>
+    <div style="margin-top: 20px;">
+        <button id="downloadBtn" style="display:none;">Download MP3</button>
+        <button id="loadStorageBtn">Load from Storage</button>
+    </div>
+
+    <script>
+        let isRecording = false;
+        let audioContext, processor, input, stream;
+        let mp3Encoder, maxSamples = 1152;
+        let leftChannel = [], recordingLength = 0;
+        let sampleRate;
+
+        const recordBtn = document.getElementById('recordBtn');
+        const audioContainer = document.getElementById('audioContainer');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const loadStorageBtn = document.getElementById('loadStorageBtn');
+
+        function set_common_localStorage(key, value) {
+            localStorage.setItem(key, value);
+        }
+
+        function get_common_localStorage(key) {
+            return localStorage.getItem(key);
+        }
+
+        function renderAudioElement(base64Url) {
+            audioContainer.innerHTML = '';
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.src = base64Url;
+            audioContainer.appendChild(audio);
+        }
+
+        recordBtn.onclick = async () => {
+            if (!isRecording) {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioContext = new AudioContext();
+                sampleRate = audioContext.sampleRate;
+                input = audioContext.createMediaStreamSource(stream);
+                processor = audioContext.createScriptProcessor(4096, 1, 1);
+
+                mp3Encoder = new lamejs.Mp3Encoder(1, sampleRate, 128);
+
+                processor.onaudioprocess = e => {
+                    const inputData = e.inputBuffer.getChannelData(0);
+                    const buffer = new Int16Array(inputData.length);
+                    for (let i = 0; i < inputData.length; i++) {
+                        let s = Math.max(-1, Math.min(1, inputData[i]));
+                        buffer[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+                    }
+                    leftChannel.push(buffer);
+                    recordingLength += buffer.length;
+                };
+
+                input.connect(processor);
+                processor.connect(audioContext.destination);
+
+                recordBtn.textContent = "Stop Recording";
+                recordBtn.classList.add("recording");
+                audioContainer.innerHTML = "";
+                downloadBtn.style.display = "none";
+
+                isRecording = true;
+            } else {
+                processor.disconnect();
+                input.disconnect();
+                stream.getTracks().forEach(track => track.stop());
+
+                let mp3Data = [];
+                let samples = mergeBuffers(leftChannel, recordingLength);
+
+                let remaining = samples.length;
+                for (let i = 0; remaining >= maxSamples; i += maxSamples) {
+                    let sampleChunk = samples.subarray(i, i + maxSamples);
+                    let mp3buf = mp3Encoder.encodeBuffer(sampleChunk);
+                    if (mp3buf.length > 0) {
+                        mp3Data.push(mp3buf);
+                    }
+                    remaining -= maxSamples;
+                }
+
+                let mp3buf = mp3Encoder.flush();
+                if (mp3buf.length > 0) {
+                    mp3Data.push(mp3buf);
+                }
+
+                const mp3Blob = new Blob(mp3Data, { type: 'audio/mp3' });
+
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const base64data = reader.result;
+                    set_common_localStorage("stored_audio", base64data);
+                    renderAudioElement(base64data);
+                };
+                reader.readAsDataURL(mp3Blob);
+
+                const mp3Url = URL.createObjectURL(mp3Blob);
+                downloadBtn.style.display = "inline-block";
+                downloadBtn.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = mp3Url;
+                    a.download = 'recording.mp3';
+                    a.click();
+                };
+
+                leftChannel = [];
+                recordingLength = 0;
+
+                recordBtn.textContent = "Start Recording";
+                recordBtn.classList.remove("recording");
+                isRecording = false;
+            }
+        };
+
+        loadStorageBtn.onclick = () => {
+            const base64data = get_common_localStorage("stored_audio");
+            if (base64data) {
+                renderAudioElement(base64data);
+            } else {
+                alert("No audio found in localStorage.");
+            }
+        };
+
+        function mergeBuffers(channelBuffer, recordingLength) {
+            const result = new Int16Array(recordingLength);
+            let offset = 0;
+            for (let i = 0; i < channelBuffer.length; i++) {
+                result.set(channelBuffer[i], offset);
+                offset += channelBuffer[i].length;
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
